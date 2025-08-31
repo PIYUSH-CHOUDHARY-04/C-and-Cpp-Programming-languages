@@ -3,24 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>C & C++ Notes</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <title>C & C++ Notes - Neural Interface</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary-color: #667eea;
-      --primary-dark: #5a67d8;
-      --secondary-color: #764ba2;
-      --accent-color: #f093fb;
-      --text-primary: #2d3748;
-      --text-secondary: #4a5568;
-      --bg-primary: #ffffff;
-      --bg-secondary: #f7fafc;
-      --border-color: #e2e8f0;
-      --shadow-light: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-      --shadow-medium: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-      --shadow-heavy: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-      --gradient-primary: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-      --gradient-accent: linear-gradient(135deg, var(--accent-color) 0%, var(--primary-color) 100%);
+      --neon-cyan: #00ffff;
+      --neon-pink: #ff00ff;
+      --neon-green: #39ff14;
+      --neon-purple: #bf00ff;
+      --dark-bg: #0a0a0a;
+      --darker-bg: #050505;
+      --card-bg: rgba(15, 15, 35, 0.8);
+      --text-primary: #ffffff;
+      --text-secondary: #a0a0ff;
+      --border-glow: rgba(0, 255, 255, 0.3);
+      --grid-color: rgba(0, 255, 255, 0.1);
     }
 
     * {
@@ -30,15 +27,15 @@
     }
 
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--bg-secondary);
+      font-family: 'Rajdhani', monospace;
+      background: var(--dark-bg);
       color: var(--text-primary);
-      line-height: 1.6;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       overflow-x: hidden;
+      position: relative;
+      min-height: 100vh;
     }
 
-    /* Animated background */
+    /* Animated grid background */
     body::before {
       content: '';
       position: fixed;
@@ -46,32 +43,60 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #667eea);
-      background-size: 400% 400%;
-      animation: gradientMove 15s ease infinite;
-      opacity: 0.03;
+      background-image: 
+        linear-gradient(rgba(0, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      animation: gridPulse 4s ease-in-out infinite;
+      z-index: -2;
+    }
+
+    /* Floating particles */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        radial-gradient(2px 2px at 20px 30px, var(--neon-cyan), transparent),
+        radial-gradient(2px 2px at 40px 70px, var(--neon-pink), transparent),
+        radial-gradient(1px 1px at 90px 40px, var(--neon-green), transparent),
+        radial-gradient(1px 1px at 130px 80px, var(--neon-purple), transparent);
+      background-repeat: repeat;
+      background-size: 200px 200px;
+      animation: particleFloat 20s linear infinite;
+      opacity: 0.4;
       z-index: -1;
     }
 
-    @keyframes gradientMove {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+    @keyframes gridPulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.8; }
     }
 
+    @keyframes particleFloat {
+      0% { transform: translateY(0) rotate(0deg); }
+      100% { transform: translateY(-100vh) rotate(360deg); }
+    }
+
+    /* Holographic header */
     header {
       position: sticky;
       top: 0;
-      z-index: 100;
-      background: rgba(255, 255, 255, 0.95);
+      z-index: 1000;
+      background: linear-gradient(135deg, rgba(0, 0, 0, 0.9) 0%, rgba(15, 15, 35, 0.9) 100%);
       backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border-color);
+      border-bottom: 2px solid var(--neon-cyan);
+      box-shadow: 
+        0 0 20px rgba(0, 255, 255, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
       padding: 20px 0;
-      box-shadow: var(--shadow-light);
     }
 
     .header-content {
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
       padding: 0 30px;
       display: flex;
@@ -82,46 +107,81 @@
     .logo {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 15px;
     }
 
     .logo-icon {
-      width: 40px;
-      height: 40px;
-      background: var(--gradient-primary);
-      border-radius: 12px;
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(45deg, var(--neon-cyan), var(--neon-purple));
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: white;
-      font-weight: 600;
-      font-size: 18px;
-      box-shadow: var(--shadow-light);
+      font-family: 'Orbitron', monospace;
+      font-weight: 900;
+      font-size: 20px;
+      color: var(--dark-bg);
+      position: relative;
+      animation: logoSpin 10s linear infinite;
+      box-shadow: 
+        0 0 30px rgba(0, 255, 255, 0.8),
+        inset 0 0 30px rgba(255, 255, 255, 0.2);
+    }
+
+    .logo-icon::before {
+      content: '';
+      position: absolute;
+      inset: -5px;
+      border-radius: 50%;
+      background: linear-gradient(45deg, var(--neon-cyan), var(--neon-purple), var(--neon-pink));
+      z-index: -1;
+      animation: logoGlow 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes logoSpin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes logoGlow {
+      0% { opacity: 0.5; transform: scale(1); }
+      100% { opacity: 1; transform: scale(1.1); }
     }
 
     header h1 {
-      font-size: 24px;
-      font-weight: 600;
-      background: var(--gradient-primary);
+      font-family: 'Orbitron', monospace;
+      font-size: 28px;
+      font-weight: 700;
+      background: linear-gradient(45deg, var(--neon-cyan), var(--neon-pink), var(--neon-green));
       background-clip: text;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+      animation: textGlow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes textGlow {
+      0% { filter: brightness(1); }
+      100% { filter: brightness(1.3); }
     }
 
     .theme-toggle {
       position: relative;
-      width: 50px;
-      height: 50px;
-      border: none;
-      border-radius: 16px;
-      background: var(--bg-primary);
+      width: 60px;
+      height: 60px;
+      border: 2px solid var(--neon-cyan);
+      border-radius: 15px;
+      background: rgba(0, 255, 255, 0.1);
       cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: var(--shadow-light);
+      transition: all 0.3s ease;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
+      font-size: 24px;
+      box-shadow: 
+        0 0 20px rgba(0, 255, 255, 0.3),
+        inset 0 0 20px rgba(0, 255, 255, 0.1);
       overflow: hidden;
     }
 
@@ -129,52 +189,86 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: var(--gradient-accent);
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      z-index: -1;
+      background: linear-gradient(45deg, transparent, rgba(0, 255, 255, 0.2), transparent);
+      transform: translateX(-100%);
+      transition: transform 0.6s ease;
     }
 
     .theme-toggle:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-medium);
+      transform: translateY(-3px);
+      box-shadow: 
+        0 10px 30px rgba(0, 255, 255, 0.6),
+        inset 0 0 30px rgba(0, 255, 255, 0.2);
+      border-color: var(--neon-pink);
     }
 
     .theme-toggle:hover::before {
-      opacity: 0.1;
+      transform: translateX(100%);
     }
 
     .container {
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
-      padding: 40px 30px;
+      padding: 60px 30px;
     }
 
     .welcome-section {
       text-align: center;
-      margin-bottom: 50px;
+      margin-bottom: 80px;
+      position: relative;
+    }
+
+    .welcome-section::before {
+      content: '';
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 200px;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+      animation: scanLine 3s ease-in-out infinite;
+    }
+
+    @keyframes scanLine {
+      0%, 100% { width: 0; opacity: 0; }
+      50% { width: 200px; opacity: 1; }
     }
 
     .welcome-section h2 {
-      font-size: 36px;
-      font-weight: 600;
-      margin-bottom: 16px;
-      background: var(--gradient-primary);
+      font-family: 'Orbitron', monospace;
+      font-size: 48px;
+      font-weight: 900;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, var(--neon-cyan), var(--neon-pink), var(--neon-green), var(--neon-purple));
       background-clip: text;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 50px rgba(0, 255, 255, 0.5);
+      animation: titleGlow 4s ease-in-out infinite;
+      letter-spacing: 2px;
+    }
+
+    @keyframes titleGlow {
+      0%, 100% { filter: brightness(1) saturate(1); }
+      25% { filter: brightness(1.2) saturate(1.2); }
+      50% { filter: brightness(1.4) saturate(1.4); }
+      75% { filter: brightness(1.2) saturate(1.2); }
     }
 
     .welcome-section p {
-      font-size: 18px;
+      font-size: 20px;
       color: var(--text-secondary);
-      max-width: 600px;
+      max-width: 700px;
       margin: 0 auto;
-      line-height: 1.7;
+      line-height: 1.8;
+      font-weight: 300;
+      opacity: 0.9;
     }
 
+    /* Futuristic search */
     .search-section {
-      margin-bottom: 40px;
+      margin-bottom: 60px;
       display: flex;
       justify-content: center;
     }
@@ -182,172 +276,244 @@
     .search-container {
       position: relative;
       width: 100%;
-      max-width: 500px;
+      max-width: 600px;
     }
 
     .search-bar {
       display: flex;
-      background: var(--bg-primary);
-      border-radius: 16px;
-      padding: 4px;
-      box-shadow: var(--shadow-light);
-      border: 1px solid var(--border-color);
-      transition: all 0.3s ease;
+      background: rgba(0, 0, 0, 0.8);
+      border: 2px solid var(--neon-cyan);
+      border-radius: 25px;
+      padding: 8px;
+      box-shadow: 
+        0 0 30px rgba(0, 255, 255, 0.3),
+        inset 0 0 30px rgba(0, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
     }
 
-    .search-bar:focus-within {
-      box-shadow: var(--shadow-medium);
-      border-color: var(--primary-color);
+    .search-bar::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.2), transparent);
+      animation: searchScan 3s ease-in-out infinite;
+    }
+
+    @keyframes searchScan {
+      0% { left: -100%; }
+      100% { left: 100%; }
     }
 
     .search-bar input {
       flex: 1;
-      padding: 14px 20px;
+      padding: 18px 25px;
       border: none;
       background: transparent;
-      font-size: 16px;
+      font-size: 18px;
       outline: none;
       color: var(--text-primary);
+      font-family: 'Rajdhani', monospace;
+      font-weight: 500;
     }
 
     .search-bar input::placeholder {
       color: var(--text-secondary);
+      opacity: 0.7;
     }
 
     .search-btn {
-      padding: 12px 24px;
+      padding: 15px 30px;
       border: none;
-      background: var(--gradient-primary);
-      color: white;
-      border-radius: 12px;
+      background: linear-gradient(45deg, var(--neon-cyan), var(--neon-purple));
+      color: var(--dark-bg);
+      border-radius: 20px;
       cursor: pointer;
-      font-weight: 500;
+      font-weight: 600;
+      font-family: 'Rajdhani', monospace;
+      font-size: 16px;
       transition: all 0.3s ease;
-      box-shadow: var(--shadow-light);
+      box-shadow: 
+        0 0 20px rgba(0, 255, 255, 0.4),
+        inset 0 0 20px rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .search-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(45deg, var(--neon-pink), var(--neon-green));
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
 
     .search-btn:hover {
-      transform: translateY(-1px);
-      box-shadow: var(--shadow-medium);
+      transform: translateY(-3px);
+      box-shadow: 
+        0 10px 40px rgba(0, 255, 255, 0.8),
+        inset 0 0 30px rgba(255, 255, 255, 0.2);
     }
 
-    /* Chapter cards */
+    .search-btn:hover::before {
+      opacity: 1;
+    }
+
+    /* Cyberpunk chapter cards */
     .chapters-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-      gap: 24px;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
       list-style: none;
     }
 
     .chapter-card {
       position: relative;
-      background: var(--bg-primary);
+      background: var(--card-bg);
+      border: 2px solid transparent;
       border-radius: 20px;
-      padding: 28px;
+      padding: 35px;
       cursor: pointer;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: var(--shadow-light);
-      border: 1px solid var(--border-color);
+      transition: all 0.4s ease;
+      backdrop-filter: blur(20px);
       overflow: hidden;
+      box-shadow: 
+        0 10px 30px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
     }
 
     .chapter-card::before {
       content: '';
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: var(--gradient-primary);
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform 0.4s ease;
+      inset: 0;
+      background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple), var(--neon-pink), var(--neon-green));
+      border-radius: 20px;
+      padding: 2px;
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .chapter-card::after {
+      content: '';
+      position: absolute;
+      inset: 2px;
+      background: var(--card-bg);
+      border-radius: 18px;
+      z-index: -1;
     }
 
     .chapter-card:hover {
-      transform: translateY(-8px);
-      box-shadow: var(--shadow-heavy);
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 
+        0 30px 60px rgba(0, 255, 255, 0.4),
+        0 0 50px rgba(255, 0, 255, 0.3);
     }
 
     .chapter-card:hover::before {
-      transform: scaleX(1);
+      opacity: 1;
+      animation: borderGlow 2s linear infinite;
+    }
+
+    @keyframes borderGlow {
+      0% { filter: hue-rotate(0deg); }
+      100% { filter: hue-rotate(360deg); }
+    }
+
+    .chapter-card.hidden {
+      opacity: 0.2;
+      transform: scale(0.9);
+      filter: grayscale(1);
     }
 
     .chapter-number {
-      display: inline-block;
-      width: 36px;
-      height: 36px;
-      background: var(--gradient-accent);
-      color: white;
-      border-radius: 10px;
-      font-weight: 600;
-      font-size: 16px;
+      position: absolute;
+      top: -10px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(45deg, var(--neon-pink), var(--neon-cyan));
+      color: var(--dark-bg);
+      border-radius: 50%;
+      font-weight: 900;
+      font-size: 20px;
+      font-family: 'Orbitron', monospace;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 16px;
-      box-shadow: var(--shadow-light);
+      box-shadow: 
+        0 0 30px rgba(255, 0, 255, 0.8),
+        inset 0 0 30px rgba(255, 255, 255, 0.2);
+      animation: numberPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes numberPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
     }
 
     .chapter-title {
-      font-size: 20px;
+      font-size: 24px;
       font-weight: 600;
       color: var(--text-primary);
-      margin-bottom: 8px;
-      line-height: 1.4;
+      margin-bottom: 15px;
+      line-height: 1.3;
+      font-family: 'Orbitron', monospace;
+      text-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
     }
 
     .chapter-description {
       color: var(--text-secondary);
-      font-size: 14px;
-      opacity: 0.8;
+      font-size: 16px;
+      line-height: 1.6;
+      font-weight: 300;
     }
 
-    /* Glow effect */
-    .glow-cursor {
+    /* Cyberpunk cursor effect */
+    .cyber-cursor {
       position: fixed;
       pointer-events: none;
-      width: 200px;
-      height: 200px;
-      background: radial-gradient(circle, rgba(102, 126, 234, 0.15) 0%, transparent 70%);
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(0, 255, 255, 0.1) 0%, rgba(255, 0, 255, 0.05) 50%, transparent 70%);
       border-radius: 50%;
       transform: translate(-50%, -50%);
       z-index: -1;
       transition: opacity 0.3s ease;
     }
 
-    /* Highlight styles */
+    /* Enhanced highlight */
     .highlight {
-      background: linear-gradient(120deg, rgba(255, 235, 59, 0.3) 0%, rgba(255, 193, 7, 0.3) 100%);
-      border-radius: 4px;
-      padding: 2px 4px;
-      font-weight: 500;
+      background: linear-gradient(45deg, rgba(0, 255, 255, 0.8), rgba(255, 0, 255, 0.8));
+      color: var(--dark-bg);
+      padding: 3px 6px;
+      border-radius: 5px;
+      font-weight: 600;
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+      animation: highlightPulse 2s ease-in-out infinite;
     }
 
-    /* Dark mode */
+    @keyframes highlightPulse {
+      0%, 100% { opacity: 0.8; }
+      50% { opacity: 1; }
+    }
+
+    /* Dark theme adjustments */
     .dark-mode {
-      --text-primary: #f7fafc;
-      --text-secondary: #a0aec0;
-      --bg-primary: #1a202c;
-      --bg-secondary: #0f1419;
-      --border-color: #2d3748;
-      --shadow-light: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-      --shadow-medium: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
-      --shadow-heavy: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+      --neon-cyan: #ff6b00;
+      --neon-pink: #ff3300;
+      --neon-green: #ffff00;
+      --neon-purple: #ff0066;
     }
 
-    .dark-mode header {
-      background: rgba(26, 32, 44, 0.95);
-    }
-
-    .dark-mode body::before {
-      opacity: 0.05;
-    }
-
-    /* Responsive design */
+    /* Mobile responsive */
     @media (max-width: 768px) {
       .container {
-        padding: 30px 20px;
+        padding: 40px 20px;
       }
 
       .header-content {
@@ -355,20 +521,32 @@
       }
 
       .welcome-section h2 {
-        font-size: 28px;
+        font-size: 36px;
       }
 
       .chapters-grid {
         grid-template-columns: 1fr;
-        gap: 16px;
+        gap: 20px;
       }
 
       .chapter-card {
-        padding: 24px;
+        padding: 25px;
+      }
+
+      .logo-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 16px;
+      }
+
+      .theme-toggle {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
       }
     }
 
-    /* Smooth animations */
+    /* Performance optimizations */
     @media (prefers-reduced-motion: reduce) {
       * {
         animation-duration: 0.01ms !important;
@@ -379,30 +557,30 @@
   </style>
 </head>
 <body>
-  <!-- Glow cursor effect -->
-  <div class="glow-cursor" id="glowCursor"></div>
+  <!-- Cyberpunk cursor effect -->
+  <div class="cyber-cursor" id="cyberCursor"></div>
 
   <header>
     <div class="header-content">
       <div class="logo">
         <div class="logo-icon">C++</div>
-        <h1>Programming Notes</h1>
+        <h1>NEURAL INTERFACE</h1>
       </div>
-      <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+      <button class="theme-toggle" onclick="toggleTheme()">🔮</button>
     </div>
   </header>
 
   <div class="container">
     <div class="welcome-section">
-      <h2>Welcome to C & C++</h2>
-      <p>Comprehensive programming notes designed for computer science students. Master the fundamentals with structured, easy-to-follow content.</p>
+      <h2>PROGRAMMING MATRIX</h2>
+      <p>Enter the digital realm of C & C++ programming. Access classified algorithms, decrypt system architectures, and master the code that powers the future.</p>
     </div>
 
     <div class="search-section">
       <div class="search-container">
         <div class="search-bar">
-          <input type="text" id="searchInput" placeholder="Search through notes...">
-          <button class="search-btn" onclick="searchText()">Search</button>
+          <input type="text" id="searchInput" placeholder="INITIALIZE SEARCH PROTOCOL...">
+          <button class="search-btn" onclick="searchText()">SCAN</button>
         </div>
       </div>
     </div>
@@ -410,20 +588,20 @@
     <ul class="chapters-grid">
       <li class="chapter-card" onclick="goToPage('Introduction_to_Programming_languages.html')">
         <div class="chapter-number">0</div>
-        <div class="chapter-title">Introduction to Programming Languages</div>
-        <div class="chapter-description">Fundamental concepts and overview of programming paradigms</div>
+        <div class="chapter-title">SYSTEM INITIALIZATION</div>
+        <div class="chapter-description">Access fundamental programming protocols and initialize core system architectures</div>
       </li>
       <li class="chapter-card" onclick="goToPage('Inside_C.html')">
         <div class="chapter-number">1</div>
-        <div class="chapter-title">Inside C</div>
-        <div class="chapter-description">Deep dive into C programming language internals</div>
+        <div class="chapter-title">CORE MATRIX ACCESS</div>
+        <div class="chapter-description">Decrypt C language internals and explore system-level programming constructs</div>
       </li>
     </ul>
   </div>
 
   <script>
-    // Glow cursor effect
-    const glowCursor = document.getElementById('glowCursor');
+    // Cyberpunk cursor effect
+    const cyberCursor = document.getElementById('cyberCursor');
     let mouseX = 0, mouseY = 0;
     let cursorX = 0, cursorY = 0;
 
@@ -432,73 +610,99 @@
       mouseY = e.clientY;
     });
 
-    function animateCursor() {
+    function animateCyberCursor() {
       const dx = mouseX - cursorX;
       const dy = mouseY - cursorY;
       
-      cursorX += dx * 0.1;
-      cursorY += dy * 0.1;
+      cursorX += dx * 0.05;
+      cursorY += dy * 0.05;
       
-      glowCursor.style.left = cursorX + 'px';
-      glowCursor.style.top = cursorY + 'px';
+      cyberCursor.style.left = cursorX + 'px';
+      cyberCursor.style.top = cursorY + 'px';
       
-      requestAnimationFrame(animateCursor);
+      requestAnimationFrame(animateCyberCursor);
     }
-    animateCursor();
+    animateCyberCursor();
 
-    // Hide glow cursor on touch devices
+    // Hide cursor on mobile
     if ('ontouchstart' in window) {
-      glowCursor.style.display = 'none';
+      cyberCursor.style.display = 'none';
     }
 
-    // Search functionality
+    // Fixed search functionality
+    let originalContent = null;
+
     function searchText() {
-      const input = document.getElementById("searchInput").value.toLowerCase().trim();
-      if (!input) return;
+      const searchTerm = document.getElementById("searchInput").value.toLowerCase().trim();
       
-      removeHighlights();
-      if (input) {
-        highlight(document.body, input);
+      if (!searchTerm) {
+        clearSearch();
+        return;
       }
-    }
-
-    function highlight(element, text) {
-      if (element.nodeType === 3) {
-        const val = element.nodeValue;
-        const idx = val.toLowerCase().indexOf(text);
-        if (idx !== -1) {
-          const span = document.createElement("span");
-          span.className = "highlight";
-          const match = val.substr(idx, text.length);
-          span.appendChild(document.createTextNode(match));
-          const after = element.splitText(idx);
-          after.nodeValue = after.nodeValue.substring(text.length);
-          element.parentNode.insertBefore(span, after);
-        }
-      } else if (element.nodeType === 1 && element.childNodes && !/(script|style)/i.test(element.tagName)) {
-        for (let i = 0; i < element.childNodes.length; i++) {
-          highlight(element.childNodes[i], text);
-        }
+      
+      if (!originalContent) {
+        originalContent = document.querySelector('.chapters-grid').innerHTML;
       }
-    }
-
-    function removeHighlights() {
-      const highlights = document.querySelectorAll(".highlight");
-      highlights.forEach(h => {
-        const parent = h.parentNode;
-        parent.replaceChild(document.createTextNode(h.textContent), h);
-        parent.normalize();
+      
+      const cards = document.querySelectorAll('.chapter-card');
+      let hasResults = false;
+      
+      cards.forEach(card => {
+        const title = card.querySelector('.chapter-title').textContent.toLowerCase();
+        const description = card.querySelector('.chapter-description').textContent.toLowerCase();
+        
+        if (title.includes(searchTerm) || description.includes(searchTerm)) {
+          card.classList.remove('hidden');
+          highlightText(card, searchTerm);
+          hasResults = true;
+        } else {
+          card.classList.add('hidden');
+        }
       });
     }
 
-    // Enhanced search with Enter key support
+    function highlightText(element, searchTerm) {
+      const titleElement = element.querySelector('.chapter-title');
+      const descElement = element.querySelector('.chapter-description');
+      
+      const regex = new RegExp(`(${searchTerm})`, 'gi');
+      
+      if (titleElement.textContent.toLowerCase().includes(searchTerm)) {
+        titleElement.innerHTML = titleElement.textContent.replace(regex, '<span class="highlight">$1</span>');
+      }
+      
+      if (descElement.textContent.toLowerCase().includes(searchTerm)) {
+        descElement.innerHTML = descElement.textContent.replace(regex, '<span class="highlight">$1</span>');
+      }
+    }
+
+    function clearSearch() {
+      if (originalContent) {
+        document.querySelector('.chapters-grid').innerHTML = originalContent;
+        document.querySelectorAll('.chapter-card').forEach((card, index) => {
+          if (index === 0) {
+            card.onclick = () => goToPage('Introduction_to_Programming_languages.html');
+          } else if (index === 1) {
+            card.onclick = () => goToPage('Inside_C.html');
+          }
+        });
+      }
+      document.getElementById('searchInput').value = '';
+    }
+
+    document.getElementById('searchInput').addEventListener('input', function() {
+      if (this.value.trim() === '') {
+        clearSearch();
+      }
+    });
+
     document.getElementById('searchInput').addEventListener('keypress', function(e) {
       if (e.key === 'Enter') {
         searchText();
       }
     });
 
-    // Theme toggle functionality
+    // Theme toggle with cyber colors
     function toggleTheme() {
       const body = document.body;
       const btn = document.querySelector(".theme-toggle");
@@ -506,42 +710,33 @@
       body.classList.toggle("dark-mode");
       
       if (body.classList.contains("dark-mode")) {
-        btn.textContent = "☀️";
+        btn.textContent = "🔥";
         localStorage.setItem("theme", "dark");
       } else {
-        btn.textContent = "🌙";
+        btn.textContent = "🔮";
         localStorage.setItem("theme", "light");
       }
     }
 
-    // Load saved theme
+    // Load theme
     window.addEventListener('load', function() {
       const savedTheme = localStorage.getItem("theme");
       const btn = document.querySelector(".theme-toggle");
       
       if (savedTheme === "dark") {
         document.body.classList.add("dark-mode");
-        btn.textContent = "☀️";
+        btn.textContent = "🔥";
       }
     });
 
-    // Navigation
+    // Navigation with glitch effect
     function goToPage(page) {
-      // Add a subtle loading animation
-      document.body.style.opacity = '0.8';
+      document.body.style.filter = 'hue-rotate(180deg)';
       setTimeout(() => {
+        document.body.style.filter = 'none';
         window.location.href = page;
-      }, 150);
+      }, 200);
     }
-
-    // Add subtle page load animation
-    window.addEventListener('load', function() {
-      document.body.style.opacity = '0';
-      setTimeout(() => {
-        document.body.style.transition = 'opacity 0.5s ease';
-        document.body.style.opacity = '1';
-      }, 100);
-    });
   </script>
 </body>
 </html>
