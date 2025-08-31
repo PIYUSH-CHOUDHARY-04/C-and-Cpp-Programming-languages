@@ -4,42 +4,74 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>C & C++ Notes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Inter', sans-serif;
       margin: 0; padding: 0;
-      background: white;
-      color: black;
+      background: #fafafa;
+      color: #2c3e50;
       transition: background 0.3s, color 0.3s;
     }
     header {
+      position: sticky; top: 0; z-index: 10;
       background: #2c3e50; color: white;
-      padding: 15px; text-align: center;
+      padding: 15px 25px; text-align: center;
+      display: flex; justify-content: space-between; align-items: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
-    .container { padding: 20px; max-width: 800px; margin: auto; }
-    h1, h2 { color: #2c3e50; }
+    header h1 {
+      margin: 0; font-size: 22px;
+    }
+    .theme-toggle {
+      padding: 6px 12px; cursor: pointer;
+      background: #fff; border: none;
+      border-radius: 50%; font-size: 18px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+    .container { padding: 30px; max-width: 900px; margin: auto; }
+    h2 { margin-top: 0; }
+    .search-bar { margin-bottom: 20px; display: flex; gap: 10px; }
+    .search-bar input {
+      flex: 1; padding: 10px; border: 1px solid #ccc;
+      border-radius: 5px; font-size: 14px;
+    }
+    .search-bar button {
+      padding: 10px 15px; border: none;
+      background: #2c3e50; color: white; cursor: pointer;
+      border-radius: 5px; transition: background 0.2s;
+    }
+    .search-bar button:hover { background: #1a252f; }
+
+    /* Chapters list */
     ul.chapters { list-style: none; padding: 0; }
     ul.chapters li {
-      background: #f4f4f4; margin: 8px 0; padding: 12px;
-      border-radius: 6px; cursor: pointer;
-      transition: background 0.2s;
+      background: white;
+      margin: 12px 0; padding: 18px;
+      border-radius: 10px; cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
-    ul.chapters li:hover { background: #dcdcdc; }
-    .search-bar { margin-bottom: 15px; }
-    .highlight { background: yellow; }
-    .theme-toggle {
-      position: absolute; top: 15px; right: 15px;
-      padding: 6px 12px; cursor: pointer;
-      background: #fff; border: 1px solid #ccc;
-      border-radius: 5px;
+    ul.chapters li:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      background: #f0f6ff;
     }
+
+    /* Highlight text */
+    .highlight {
+      background: yellow; font-weight: bold;
+      border-radius: 3px; padding: 0 2px;
+    }
+
+    /* Dark mode */
     .dark-mode {
-      background: #121212;
-      color: #e0e0e0;
+      background: #121212; color: #e0e0e0;
     }
-    .dark-mode header {
-      background: #1e1e1e;
-    }
+    .dark-mode header { background: #1e1e1e; }
+    .dark-mode .search-bar button { background: #333; }
+    .dark-mode ul.chapters li { background: #1e1e1e; color: #ddd; }
+    .dark-mode ul.chapters li:hover { background: #2c2c2c; }
   </style>
 </head>
 <body>
@@ -55,7 +87,7 @@
     </div>
 
     <h2>Welcome</h2>
-    <p>This site contains structured notes on C and C++ programming. Below are the chapters covered in this series:</p>
+    <p>This site contains structured notes on <b>C and C++ programming</b>. Below are the chapters covered in this series:</p>
 
     <ul class="chapters">
       <li onclick="goToPage('Introduction_to_Programming_languages.html')">
@@ -72,21 +104,57 @@
     function searchText() {
       const input = document.getElementById("searchInput").value.toLowerCase();
       if (!input) return;
-      const bodyText = document.body.innerHTML;
-      const regex = new RegExp(input, "gi");
-      document.body.innerHTML = bodyText.replace(regex, match => `<span class="highlight">${match}</span>`);
+      removeHighlights();
+      highlight(document.body, input);
+    }
+
+    function highlight(element, text) {
+      if (element.nodeType === 3) {
+        const val = element.nodeValue;
+        const idx = val.toLowerCase().indexOf(text);
+        if (idx !== -1) {
+          const span = document.createElement("span");
+          span.className = "highlight";
+          const match = val.substr(idx, text.length);
+          span.appendChild(document.createTextNode(match));
+          const after = element.splitText(idx);
+          after.nodeValue = after.nodeValue.substring(text.length);
+          element.parentNode.insertBefore(span, after);
+        }
+      } else if (element.nodeType === 1 && element.childNodes && !/(script|style)/i.test(element.tagName)) {
+        for (let i = 0; i < element.childNodes.length; i++) {
+          highlight(element.childNodes[i], text);
+        }
+      }
+    }
+
+    function removeHighlights() {
+      const highlights = document.querySelectorAll(".highlight");
+      highlights.forEach(h => {
+        const parent = h.parentNode;
+        parent.replaceChild(document.createTextNode(h.textContent), h);
+        parent.normalize();
+      });
     }
 
     // 🌙 Dark/Light Mode
     function toggleTheme() {
       document.body.classList.toggle("dark-mode");
-      localStorage.setItem("theme", document.body.classList.contains("dark-mode") ? "dark" : "light");
+      const btn = document.querySelector(".theme-toggle");
+      if (document.body.classList.contains("dark-mode")) {
+        btn.textContent = "☀️";
+        localStorage.setItem("theme", "dark");
+      } else {
+        btn.textContent = "🌙";
+        localStorage.setItem("theme", "light");
+      }
     }
 
     // Save theme preference
     window.onload = function() {
       if(localStorage.getItem("theme") === "dark") {
         document.body.classList.add("dark-mode");
+        document.querySelector(".theme-toggle").textContent = "☀️";
       }
     }
 
