@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>C & C++ Notes</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0; padding: 0;
+      background: white;
+      color: black;
+      transition: background 0.3s, color 0.3s;
+    }
+    header {
+      background: #2c3e50; color: white;
+      padding: 15px; text-align: center;
+    }
+    .container { padding: 20px; max-width: 800px; margin: auto; }
+    h1, h2 { color: #2c3e50; }
+    ul.chapters { list-style: none; padding: 0; }
+    ul.chapters li {
+      background: #f4f4f4; margin: 8px 0; padding: 12px;
+      border-radius: 6px; cursor: pointer;
+      transition: background 0.2s;
+    }
+    ul.chapters li:hover { background: #dcdcdc; }
+    .search-bar { margin-bottom: 15px; }
+    .highlight { background: yellow; }
+    .theme-toggle {
+      position: absolute; top: 15px; right: 15px;
+      padding: 6px 12px; cursor: pointer;
+      background: #fff; border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .dark-mode {
+      background: #121212;
+      color: #e0e0e0;
+    }
+    .dark-mode header {
+      background: #1e1e1e;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>C & C++ Programming Notes</h1>
+    <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+  </header>
+
+  <div class="container">
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Search in page...">
+      <button onclick="searchText()">Search</button>
+    </div>
+
+    <h2>Welcome</h2>
+    <p>This site contains structured notes on C and C++ programming. Below are the chapters covered in this series:</p>
+
+    <ul class="chapters">
+      <li onclick="goToPage('Introduction_to_Programming_languages.html')">
+        [0] Introduction to Programming Languages
+      </li>
+      <li onclick="goToPage('Inside_C.html')">
+        [1] Inside C
+      </li>
+    </ul>
+  </div>
+
+  <script>
+    // 🔎 Search & highlight function
+    function searchText() {
+      const input = document.getElementById("searchInput").value.toLowerCase();
+      if (!input) return;
+      const bodyText = document.body.innerHTML;
+      const regex = new RegExp(input, "gi");
+      document.body.innerHTML = bodyText.replace(regex, match => `<span class="highlight">${match}</span>`);
+    }
+
+    // 🌙 Dark/Light Mode
+    function toggleTheme() {
+      document.body.classList.toggle("dark-mode");
+      localStorage.setItem("theme", document.body.classList.contains("dark-mode") ? "dark" : "light");
+    }
+
+    // Save theme preference
+    window.onload = function() {
+      if(localStorage.getItem("theme") === "dark") {
+        document.body.classList.add("dark-mode");
+      }
+    }
+
+    // 📑 Go to chapters
+    function goToPage(page) {
+      window.location.href = page;
+    }
+  </script>
+</body>
+</html>
+
