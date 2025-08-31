@@ -3,248 +3,738 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>C & C++ Notes</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <title>C & C++ Notes - Neural Interface</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      margin: 0; padding: 0;
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-      color: #e0e0e0;
-      transition: background 0.5s, color 0.5s;
+    :root {
+      --neon-cyan: #00ffff;
+      --neon-pink: #ff00ff;
+      --neon-green: #39ff14;
+      --neon-purple: #bf00ff;
+      --dark-bg: #0a0a0a;
+      --darker-bg: #050505;
+      --card-bg: rgba(15, 15, 35, 0.8);
+      --text-primary: #ffffff;
+      --text-secondary: #a0a0ff;
+      --border-glow: rgba(0, 255, 255, 0.3);
+      --grid-color: rgba(0, 255, 255, 0.1);
     }
 
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Rajdhani', monospace;
+      background: var(--dark-bg);
+      color: var(--text-primary);
+      overflow-x: hidden;
+      position: relative;
+      min-height: 100vh;
+    }
+
+    /* Animated grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(0, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      animation: gridPulse 4s ease-in-out infinite;
+      z-index: -2;
+    }
+
+    /* Floating particles */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        radial-gradient(2px 2px at 20px 30px, var(--neon-cyan), transparent),
+        radial-gradient(2px 2px at 40px 70px, var(--neon-pink), transparent),
+        radial-gradient(1px 1px at 90px 40px, var(--neon-green), transparent),
+        radial-gradient(1px 1px at 130px 80px, var(--neon-purple), transparent);
+      background-repeat: repeat;
+      background-size: 200px 200px;
+      animation: particleFloat 20s linear infinite;
+      opacity: 0.4;
+      z-index: -1;
+    }
+
+    @keyframes gridPulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.8; }
+    }
+
+    @keyframes particleFloat {
+      0% { transform: translateY(0) rotate(0deg); }
+      100% { transform: translateY(-100vh) rotate(360deg); }
+    }
+
+    /* Holographic header */
     header {
-      position: sticky; top: 0; z-index: 10;
-      background: rgba(20, 20, 20, 0.7);
-      backdrop-filter: blur(10px);
-      color: white;
-      padding: 20px 30px;
-      display: flex; justify-content: space-between; align-items: center;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: linear-gradient(135deg, rgba(0, 0, 0, 0.9) 0%, rgba(15, 15, 35, 0.9) 100%);
+      backdrop-filter: blur(20px);
+      border-bottom: 2px solid var(--neon-cyan);
+      box-shadow: 
+        0 0 20px rgba(0, 255, 255, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      padding: 20px 0;
+    }
+
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .logo-icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(45deg, var(--neon-cyan), var(--neon-purple));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Orbitron', monospace;
+      font-weight: 900;
+      font-size: 20px;
+      color: var(--dark-bg);
+      position: relative;
+      animation: logoSpin 10s linear infinite;
+      box-shadow: 
+        0 0 30px rgba(0, 255, 255, 0.8),
+        inset 0 0 30px rgba(255, 255, 255, 0.2);
+    }
+
+    .logo-icon::before {
+      content: '';
+      position: absolute;
+      inset: -5px;
+      border-radius: 50%;
+      background: linear-gradient(45deg, var(--neon-cyan), var(--neon-purple), var(--neon-pink));
+      z-index: -1;
+      animation: logoGlow 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes logoSpin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes logoGlow {
+      0% { opacity: 0.5; transform: scale(1); }
+      100% { opacity: 1; transform: scale(1.1); }
     }
 
     header h1 {
-      margin: 0; font-size: 24px;
-      letter-spacing: 1px;
-      text-shadow: 0 0 10px cyan;
+      font-family: 'Orbitron', monospace;
+      font-size: 28px;
+      font-weight: 700;
+      background: linear-gradient(45deg, var(--neon-cyan), var(--neon-pink), var(--neon-green));
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+      animation: textGlow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes textGlow {
+      0% { filter: brightness(1); }
+      100% { filter: brightness(1.3); }
     }
 
     .theme-toggle {
-      padding: 10px;
+      position: relative;
+      width: 60px;
+      height: 60px;
+      border: 2px solid var(--neon-cyan);
+      border-radius: 15px;
+      background: rgba(0, 255, 255, 0.1);
       cursor: pointer;
-      background: rgba(255,255,255,0.1);
-      border: 2px solid rgba(255,255,255,0.3);
-      border-radius: 50%;
-      font-size: 18px;
-      transition: transform 0.3s;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: 
+        0 0 20px rgba(0, 255, 255, 0.3),
+        inset 0 0 20px rgba(0, 255, 255, 0.1);
+      overflow: hidden;
     }
-    .theme-toggle:hover { transform: rotate(20deg) scale(1.1); }
 
-    .container { padding: 40px; max-width: 900px; margin: auto; }
-
-    .search-bar { margin-bottom: 25px; display: flex; gap: 12px; }
-    .search-bar input {
-      flex: 1; padding: 12px; border: none;
-      border-radius: 10px; font-size: 15px;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+    .theme-toggle::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(45deg, transparent, rgba(0, 255, 255, 0.2), transparent);
+      transform: translateX(-100%);
+      transition: transform 0.6s ease;
     }
-    .search-bar button {
-      padding: 12px 18px; border: none;
-      background: cyan; color: black;
-      font-weight: bold;
-      border-radius: 10px; cursor: pointer;
-      transition: background 0.3s;
-    }
-    .search-bar button:hover { background: #00ffaa; }
 
-    /* Chapter cards */
-    ul.chapters { list-style: none; padding: 0; }
-    ul.chapters li {
-      background: rgba(255,255,255,0.05);
-      backdrop-filter: blur(10px);
-      margin: 15px 0; padding: 20px;
-      border-radius: 12px; cursor: pointer;
-      transition: transform 0.3s, box-shadow 0.3s;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    .theme-toggle:hover {
+      transform: translateY(-3px);
+      box-shadow: 
+        0 10px 30px rgba(0, 255, 255, 0.6),
+        inset 0 0 30px rgba(0, 255, 255, 0.2);
+      border-color: var(--neon-pink);
+    }
+
+    .theme-toggle:hover::before {
+      transform: translateX(100%);
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 60px 30px;
+    }
+
+    .welcome-section {
+      text-align: center;
+      margin-bottom: 80px;
       position: relative;
     }
-    ul.chapters li:hover {
-      transform: translateY(-6px) scale(1.02);
-      box-shadow: 0 6px 25px rgba(0, 255, 255, 0.6);
+
+    .welcome-section::before {
+      content: '';
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 200px;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+      animation: scanLine 3s ease-in-out infinite;
+    }
+
+    @keyframes scanLine {
+      0%, 100% { width: 0; opacity: 0; }
+      50% { width: 200px; opacity: 1; }
+    }
+
+    .welcome-section h2 {
+      font-family: 'Orbitron', monospace;
+      font-size: 48px;
+      font-weight: 900;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, var(--neon-cyan), var(--neon-pink), var(--neon-green), var(--neon-purple));
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 50px rgba(0, 255, 255, 0.5);
+      animation: titleGlow 4s ease-in-out infinite;
+      letter-spacing: 2px;
+    }
+
+    @keyframes titleGlow {
+      0%, 100% { filter: brightness(1) saturate(1); }
+      25% { filter: brightness(1.2) saturate(1.2); }
+      50% { filter: brightness(1.4) saturate(1.4); }
+      75% { filter: brightness(1.2) saturate(1.2); }
+    }
+
+    .welcome-section p {
+      font-size: 20px;
+      color: var(--text-secondary);
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.8;
+      font-weight: 300;
+      opacity: 0.9;
+    }
+
+    /* Futuristic search */
+    .search-section {
+      margin-bottom: 60px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .search-container {
+      position: relative;
+      width: 100%;
+      max-width: 600px;
+    }
+
+    .search-bar {
+      display: flex;
+      background: rgba(0, 0, 0, 0.8);
+      border: 2px solid var(--neon-cyan);
+      border-radius: 25px;
+      padding: 8px;
+      box-shadow: 
+        0 0 30px rgba(0, 255, 255, 0.3),
+        inset 0 0 30px rgba(0, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .search-bar::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.2), transparent);
+      animation: searchScan 3s ease-in-out infinite;
+    }
+
+    @keyframes searchScan {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+
+    .search-bar input {
+      flex: 1;
+      padding: 18px 25px;
+      border: none;
+      background: transparent;
+      font-size: 18px;
+      outline: none;
+      color: var(--text-primary);
+      font-family: 'Rajdhani', monospace;
+      font-weight: 500;
+    }
+
+    .search-bar input::placeholder {
+      color: var(--text-secondary);
+      opacity: 0.7;
+    }
+
+    .search-btn {
+      padding: 15px 30px;
+      border: none;
+      background: linear-gradient(45deg, var(--neon-cyan), var(--neon-purple));
+      color: var(--dark-bg);
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 600;
+      font-family: 'Rajdhani', monospace;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      box-shadow: 
+        0 0 20px rgba(0, 255, 255, 0.4),
+        inset 0 0 20px rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .search-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(45deg, var(--neon-pink), var(--neon-green));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .search-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 
+        0 10px 40px rgba(0, 255, 255, 0.8),
+        inset 0 0 30px rgba(255, 255, 255, 0.2);
+    }
+
+    .search-btn:hover::before {
+      opacity: 1;
+    }
+
+    /* Cyberpunk chapter cards */
+    .chapters-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      list-style: none;
+    }
+
+    .chapter-card {
+      position: relative;
+      background: var(--card-bg);
+      border: 2px solid transparent;
+      border-radius: 20px;
+      padding: 35px;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      backdrop-filter: blur(20px);
+      overflow: hidden;
+      box-shadow: 
+        0 10px 30px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    .chapter-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple), var(--neon-pink), var(--neon-green));
+      border-radius: 20px;
+      padding: 2px;
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .chapter-card::after {
+      content: '';
+      position: absolute;
+      inset: 2px;
+      background: var(--card-bg);
+      border-radius: 18px;
+      z-index: -1;
+    }
+
+    .chapter-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 
+        0 30px 60px rgba(0, 255, 255, 0.4),
+        0 0 50px rgba(255, 0, 255, 0.3);
+    }
+
+    .chapter-card:hover::before {
+      opacity: 1;
+      animation: borderGlow 2s linear infinite;
+    }
+
+    @keyframes borderGlow {
+      0% { filter: hue-rotate(0deg); }
+      100% { filter: hue-rotate(360deg); }
+    }
+
+    .chapter-card.hidden {
+      opacity: 0.2;
+      transform: scale(0.9);
+      filter: grayscale(1);
+    }
+
+    .chapter-number {
+      position: absolute;
+      top: -10px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(45deg, var(--neon-pink), var(--neon-cyan));
+      color: var(--dark-bg);
+      border-radius: 50%;
+      font-weight: 900;
+      font-size: 20px;
+      font-family: 'Orbitron', monospace;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 
+        0 0 30px rgba(255, 0, 255, 0.8),
+        inset 0 0 30px rgba(255, 255, 255, 0.2);
+      animation: numberPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes numberPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
     }
 
     .chapter-title {
-      display: flex; justify-content: space-between; align-items: center;
-      font-size: 18px; font-weight: 600;
-    }
-    .dropdown-btn {
-      background: none; border: none; color: cyan;
-      font-size: 18px; cursor: pointer;
-      transition: transform 0.3s;
-    }
-    .rotate { transform: rotate(90deg); }
-
-    .chapter-content {
-      max-height: 0; overflow: hidden;
-      transition: max-height 0.5s ease, opacity 0.5s ease;
-      opacity: 0; margin-top: 10px;
-      padding-left: 15px;
-      border-left: 2px solid cyan;
-    }
-    .chapter-content.show {
-      max-height: 500px; opacity: 1;
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 15px;
+      line-height: 1.3;
+      font-family: 'Orbitron', monospace;
+      text-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
     }
 
-    .chapter-content ul { margin: 8px 0; padding-left: 20px; }
-    .chapter-content li { margin: 5px 0; font-size: 15px; }
+    .chapter-description {
+      color: var(--text-secondary);
+      font-size: 16px;
+      line-height: 1.6;
+      font-weight: 300;
+    }
 
-    /* Neon highlight */
+    /* Cyberpunk cursor effect */
+    .cyber-cursor {
+      position: fixed;
+      pointer-events: none;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(0, 255, 255, 0.1) 0%, rgba(255, 0, 255, 0.05) 50%, transparent 70%);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      z-index: -1;
+      transition: opacity 0.3s ease;
+    }
+
+    /* Enhanced highlight */
     .highlight {
-      background: cyan;
-      color: black;
-      font-weight: bold;
-      padding: 2px 4px;
-      border-radius: 4px;
-      box-shadow: 0 0 8px cyan;
+      background: linear-gradient(45deg, rgba(0, 255, 255, 0.8), rgba(255, 0, 255, 0.8));
+      color: var(--dark-bg);
+      padding: 3px 6px;
+      border-radius: 5px;
+      font-weight: 600;
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+      animation: highlightPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes highlightPulse {
+      0%, 100% { opacity: 0.8; }
+      50% { opacity: 1; }
+    }
+
+    /* Dark theme adjustments */
+    .dark-mode {
+      --neon-cyan: #ff6b00;
+      --neon-pink: #ff3300;
+      --neon-green: #ffff00;
+      --neon-purple: #ff0066;
+    }
+
+    /* Mobile responsive */
+    @media (max-width: 768px) {
+      .container {
+        padding: 40px 20px;
+      }
+
+      .header-content {
+        padding: 0 20px;
+      }
+
+      .welcome-section h2 {
+        font-size: 36px;
+      }
+
+      .chapters-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .chapter-card {
+        padding: 25px;
+      }
+
+      .logo-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 16px;
+      }
+
+      .theme-toggle {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+      }
+    }
+
+    /* Performance optimizations */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
     }
   </style>
 </head>
 <body>
+  <!-- Cyberpunk cursor effect -->
+  <div class="cyber-cursor" id="cyberCursor"></div>
+
   <header>
-    <h1>⚡ C & C++ Programming Notes</h1>
-    <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+    <div class="header-content">
+      <div class="logo">
+        <div class="logo-icon">C++</div>
+        <h1>NEURAL INTERFACE</h1>
+      </div>
+      <button class="theme-toggle" onclick="toggleTheme()">🔮</button>
+    </div>
   </header>
 
   <div class="container">
-    <div class="search-bar">
-      <input type="text" id="searchInput" placeholder="Search in page...">
-      <button onclick="searchText()">Search</button>
+    <div class="welcome-section">
+      <h2>PROGRAMMING MATRIX</h2>
+      <p>Enter the digital realm of C & C++ programming. Access classified algorithms, decrypt system architectures, and master the code that powers the future.</p>
     </div>
 
-    <h2>Welcome 🚀</h2>
-    <p>Dive into structured notes on <b>C and C++ programming</b> with a futuristic aesthetic ✨</p>
-
-    <ul class="chapters">
-
-      <!-- Chapter 0 -->
-      <li>
-        <div class="chapter-title">
-          <span onclick="goToPage('Introduction_to_Programming_languages.html')">
-            [0] Introduction to Programming Languages
-          </span>
-          <button class="dropdown-btn" onclick="toggleDropdown(this)">▶</button>
+    <div class="search-section">
+      <div class="search-container">
+        <div class="search-bar">
+          <input type="text" id="searchInput" placeholder="INITIALIZE SEARCH PROTOCOL...">
+          <button class="search-btn" onclick="searchText()">SCAN</button>
         </div>
-        <div class="chapter-content">
-          <ul>
-            <li>&lt;01&gt; Computer and their hardware models</li>
-            <li>&lt;02&gt; Building blocks of computers and their combinations</li>
-            <li>&lt;03&gt; Digital instructions and architecture</li>
-            <li>&lt;04&gt; Need of Programming languages</li>
-            <li>&lt;05&gt; History of Programming languages</li>
-            <li>&lt;06&gt; Type of Programming languages based on interaction with system</li>
-            <li>&lt;07&gt; How does a Programming language should look like</li>
-            <li>&lt;08&gt; Programming Paradigms</li>
-            <li>&lt;09&gt; Outstanding C and its rawness</li>
-            <li>&lt;10&gt; Compilers and Interpreters</li>
-            <li>&lt;11&gt; Compilation and steps</li>
-            <li>&lt;12&gt; Compiler's Abstraction</li>
-            <li>&lt;13&gt; System Architecture and program memory model</li>
-            <li>&lt;14&gt; Why C?</li>
-          </ul>
-        </div>
+      </div>
+    </div>
+
+    <ul class="chapters-grid">
+      <li class="chapter-card" data-title="system initialization" data-desc="access fundamental programming protocols initialize core system architectures" onclick="goToPage('Introduction_to_Programming_languages.html')">
+        <div class="chapter-number">0</div>
+        <div class="chapter-title">SYSTEM INITIALIZATION</div>
+        <div class="chapter-description">Access fundamental programming protocols and initialize core system architectures</div>
       </li>
-
-      <!-- Chapter 1 -->
-      <li>
-        <div class="chapter-title">
-          <span onclick="goToPage('Inside_C.html')">
-            [1] Inside C
-          </span>
-          <button class="dropdown-btn" onclick="toggleDropdown(this)">▶</button>
-        </div>
-        <div class="chapter-content">
-          <ul>
-            <li>&lt;01&gt; What entities does C have?</li>
-            <li>&lt;02&gt; C entities mapped to ASM instructions</li>
-            <li>&lt;03&gt; Pros and Cons of C</li>
-          </ul>
-        </div>
+      <li class="chapter-card" data-title="core matrix access" data-desc="decrypt c language internals explore system-level programming constructs" onclick="goToPage('Inside_C.html')">
+        <div class="chapter-number">1</div>
+        <div class="chapter-title">CORE MATRIX ACCESS</div>
+        <div class="chapter-description">Decrypt C language internals and explore system-level programming constructs</div>
       </li>
-
     </ul>
   </div>
 
   <script>
-    // Toggle dropdown
-    function toggleDropdown(btn) {
-      const content = btn.parentElement.nextElementSibling;
-      content.classList.toggle("show");
-      btn.classList.toggle("rotate");
+    // Cyberpunk cursor effect
+    const cyberCursor = document.getElementById('cyberCursor');
+    let mouseX = 0, mouseY = 0;
+    let cursorX = 0, cursorY = 0;
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+
+    function animateCyberCursor() {
+      const dx = mouseX - cursorX;
+      const dy = mouseY - cursorY;
+      
+      cursorX += dx * 0.05;
+      cursorY += dy * 0.05;
+      
+      cyberCursor.style.left = cursorX + 'px';
+      cyberCursor.style.top = cursorY + 'px';
+      
+      requestAnimationFrame(animateCyberCursor);
+    }
+    animateCyberCursor();
+
+    // Hide cursor on mobile
+    if ('ontouchstart' in window) {
+      cyberCursor.style.display = 'none';
     }
 
-    // Search & highlight
+    // MUCH SIMPLER SEARCH - No DOM manipulation crashes!
     function searchText() {
-      const input = document.getElementById("searchInput").value.toLowerCase();
-      if (!input) return;
-      removeHighlights();
-      highlight(document.body, input);
-    }
-    function highlight(element, text) {
-      if (element.nodeType === 3) {
-        const val = element.nodeValue;
-        const idx = val.toLowerCase().indexOf(text);
-        if (idx !== -1) {
-          const span = document.createElement("span");
-          span.className = "highlight";
-          const match = val.substr(idx, text.length);
-          span.appendChild(document.createTextNode(match));
-          const after = element.splitText(idx);
-          after.nodeValue = after.nodeValue.substring(text.length);
-          element.parentNode.insertBefore(span, after);
-        }
-      } else if (element.nodeType === 1 && element.childNodes && !/(script|style)/i.test(element.tagName)) {
-        for (let i = 0; i < element.childNodes.length; i++) {
-          highlight(element.childNodes[i], text);
-        }
+      const searchTerm = document.getElementById("searchInput").value.toLowerCase().trim();
+      const cards = document.querySelectorAll('.chapter-card');
+      
+      if (!searchTerm) {
+        // Show all cards
+        cards.forEach(card => {
+          card.classList.remove('hidden');
+          resetCardText(card);
+        });
+        return;
       }
-    }
-    function removeHighlights() {
-      document.querySelectorAll(".highlight").forEach(h => {
-        const parent = h.parentNode;
-        parent.replaceChild(document.createTextNode(h.textContent), h);
-        parent.normalize();
+      
+      cards.forEach(card => {
+        const title = card.dataset.title || '';
+        const desc = card.dataset.desc || '';
+        
+        if (title.includes(searchTerm) || desc.includes(searchTerm)) {
+          card.classList.remove('hidden');
+          // Simple highlight without breaking DOM
+          highlightCard(card, searchTerm);
+        } else {
+          card.classList.add('hidden');
+        }
       });
     }
 
-    // Dark/Light mode
-    function toggleTheme() {
-      document.body.classList.toggle("light-mode");
-      const btn = document.querySelector(".theme-toggle");
-      if (document.body.classList.contains("light-mode")) {
-        document.body.style.background = "linear-gradient(135deg, #f8f9fb, #e3f2fd)";
-        document.body.style.color = "#2c3e50";
-        btn.textContent = "🌙";
-        localStorage.setItem("theme", "light");
-      } else {
-        document.body.style.background = "linear-gradient(135deg, #0f2027, #203a43, #2c5364)";
-        document.body.style.color = "#e0e0e0";
-        btn.textContent = "☀️";
-        localStorage.setItem("theme", "dark");
+    function highlightCard(card, searchTerm) {
+      const titleEl = card.querySelector('.chapter-title');
+      const descEl = card.querySelector('.chapter-description');
+      
+      // Store original text if not already stored
+      if (!titleEl.dataset.original) {
+        titleEl.dataset.original = titleEl.textContent;
+        descEl.dataset.original = descEl.textContent;
       }
+      
+      // Simple case-insensitive replace
+      const titleText = titleEl.dataset.original;
+      const descText = descEl.dataset.original;
+      
+      const regex = new RegExp(`(${searchTerm})`, 'gi');
+      
+      titleEl.innerHTML = titleText.replace(regex, '<span class="highlight">$1</span>');
+      descEl.innerHTML = descText.replace(regex, '<span class="highlight">$1</span>');
     }
-    window.onload = function() {
-      if(localStorage.getItem("theme") === "light") {
-        document.body.classList.add("light-mode");
-        document.body.style.background = "linear-gradient(135deg, #f8f9fb, #e3f2fd)";
-        document.body.style.color = "#2c3e50";
-        document.querySelector(".theme-toggle").textContent = "🌙";
+
+    function resetCardText(card) {
+      const titleEl = card.querySelector('.chapter-title');
+      const descEl = card.querySelector('.chapter-description');
+      
+      if (titleEl.dataset.original) {
+        titleEl.textContent = titleEl.dataset.original;
+        descEl.textContent = descEl.dataset.original;
       }
     }
 
-    // Navigate chapters
+    // Clear search on empty input
+    document.getElementById('searchInput').addEventListener('input', function() {
+      if (this.value.trim() === '') {
+        searchText(); // This will reset everything
+      }
+    });
+
+    // Enter key search
+    document.getElementById('searchInput').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        searchText();
+      }
+    });
+
+    // Theme toggle
+    function toggleTheme() {
+      const body = document.body;
+      const btn = document.querySelector(".theme-toggle");
+      
+      body.classList.toggle("dark-mode");
+      
+      if (body.classList.contains("dark-mode")) {
+        btn.textContent = "🔥";
+        localStorage.setItem("theme", "dark");
+      } else {
+        btn.textContent = "🔮";
+        localStorage.setItem("theme", "light");
+      }
+    }
+
+    // Load theme
+    window.addEventListener('load', function() {
+      const savedTheme = localStorage.getItem("theme");
+      const btn = document.querySelector(".theme-toggle");
+      
+      if (savedTheme === "dark") {
+        document.body.classList.add("dark-mode");
+        btn.textContent = "🔥";
+      }
+    });
+
+    // Navigation with glitch effect
     function goToPage(page) {
-      window.location.href = page;
+      document.body.style.filter = 'hue-rotate(180deg)';
+      setTimeout(() => {
+        document.body.style.filter = 'none';
+        window.location.href = page;
+      }, 200);
     }
   </script>
 </body>
