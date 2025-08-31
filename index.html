@@ -4,108 +4,462 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>C & C++ Notes</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --primary-color: #667eea;
+      --primary-dark: #5a67d8;
+      --secondary-color: #764ba2;
+      --accent-color: #f093fb;
+      --text-primary: #2d3748;
+      --text-secondary: #4a5568;
+      --bg-primary: #ffffff;
+      --bg-secondary: #f7fafc;
+      --border-color: #e2e8f0;
+      --shadow-light: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-medium: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --shadow-heavy: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      --gradient-primary: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+      --gradient-accent: linear-gradient(135deg, var(--accent-color) 0%, var(--primary-color) 100%);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: 'Inter', sans-serif;
-      margin: 0; padding: 0;
-      background: #fafafa;
-      color: #2c3e50;
-      transition: background 0.3s, color 0.3s;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow-x: hidden;
     }
+
+    /* Animated background */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #667eea);
+      background-size: 400% 400%;
+      animation: gradientMove 15s ease infinite;
+      opacity: 0.03;
+      z-index: -1;
+    }
+
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
     header {
-      position: sticky; top: 0; z-index: 10;
-      background: #2c3e50; color: white;
-      padding: 15px 25px; text-align: center;
-      display: flex; justify-content: space-between; align-items: center;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 20px 0;
+      box-shadow: var(--shadow-light);
     }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--gradient-primary);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      font-size: 18px;
+      box-shadow: var(--shadow-light);
+    }
+
     header h1 {
-      margin: 0; font-size: 22px;
+      font-size: 24px;
+      font-weight: 600;
+      background: var(--gradient-primary);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
+
     .theme-toggle {
-      padding: 6px 12px; cursor: pointer;
-      background: #fff; border: none;
-      border-radius: 50%; font-size: 18px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      position: relative;
+      width: 50px;
+      height: 50px;
+      border: none;
+      border-radius: 16px;
+      background: var(--bg-primary);
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: var(--shadow-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      overflow: hidden;
     }
-    .container { padding: 30px; max-width: 900px; margin: auto; }
-    h2 { margin-top: 0; }
-    .search-bar { margin-bottom: 20px; display: flex; gap: 10px; }
+
+    .theme-toggle::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--gradient-accent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: -1;
+    }
+
+    .theme-toggle:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-medium);
+    }
+
+    .theme-toggle:hover::before {
+      opacity: 0.1;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 30px;
+    }
+
+    .welcome-section {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .welcome-section h2 {
+      font-size: 36px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      background: var(--gradient-primary);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .welcome-section p {
+      font-size: 18px;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    .search-section {
+      margin-bottom: 40px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .search-container {
+      position: relative;
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .search-bar {
+      display: flex;
+      background: var(--bg-primary);
+      border-radius: 16px;
+      padding: 4px;
+      box-shadow: var(--shadow-light);
+      border: 1px solid var(--border-color);
+      transition: all 0.3s ease;
+    }
+
+    .search-bar:focus-within {
+      box-shadow: var(--shadow-medium);
+      border-color: var(--primary-color);
+    }
+
     .search-bar input {
-      flex: 1; padding: 10px; border: 1px solid #ccc;
-      border-radius: 5px; font-size: 14px;
-    }
-    .search-bar button {
-      padding: 10px 15px; border: none;
-      background: #2c3e50; color: white; cursor: pointer;
-      border-radius: 5px; transition: background 0.2s;
-    }
-    .search-bar button:hover { background: #1a252f; }
-
-    /* Chapters list */
-    ul.chapters { list-style: none; padding: 0; }
-    ul.chapters li {
-      background: white;
-      margin: 12px 0; padding: 18px;
-      border-radius: 10px; cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-    ul.chapters li:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-      background: #f0f6ff;
+      flex: 1;
+      padding: 14px 20px;
+      border: none;
+      background: transparent;
+      font-size: 16px;
+      outline: none;
+      color: var(--text-primary);
     }
 
-    /* Highlight text */
+    .search-bar input::placeholder {
+      color: var(--text-secondary);
+    }
+
+    .search-btn {
+      padding: 12px 24px;
+      border: none;
+      background: var(--gradient-primary);
+      color: white;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-light);
+    }
+
+    .search-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-medium);
+    }
+
+    /* Chapter cards */
+    .chapters-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 24px;
+      list-style: none;
+    }
+
+    .chapter-card {
+      position: relative;
+      background: var(--bg-primary);
+      border-radius: 20px;
+      padding: 28px;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: var(--shadow-light);
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+    }
+
+    .chapter-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--gradient-primary);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+
+    .chapter-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-heavy);
+    }
+
+    .chapter-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .chapter-number {
+      display: inline-block;
+      width: 36px;
+      height: 36px;
+      background: var(--gradient-accent);
+      color: white;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-light);
+    }
+
+    .chapter-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+
+    .chapter-description {
+      color: var(--text-secondary);
+      font-size: 14px;
+      opacity: 0.8;
+    }
+
+    /* Glow effect */
+    .glow-cursor {
+      position: fixed;
+      pointer-events: none;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, rgba(102, 126, 234, 0.15) 0%, transparent 70%);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      z-index: -1;
+      transition: opacity 0.3s ease;
+    }
+
+    /* Highlight styles */
     .highlight {
-      background: yellow; font-weight: bold;
-      border-radius: 3px; padding: 0 2px;
+      background: linear-gradient(120deg, rgba(255, 235, 59, 0.3) 0%, rgba(255, 193, 7, 0.3) 100%);
+      border-radius: 4px;
+      padding: 2px 4px;
+      font-weight: 500;
     }
 
     /* Dark mode */
     .dark-mode {
-      background: #121212; color: #e0e0e0;
+      --text-primary: #f7fafc;
+      --text-secondary: #a0aec0;
+      --bg-primary: #1a202c;
+      --bg-secondary: #0f1419;
+      --border-color: #2d3748;
+      --shadow-light: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+      --shadow-medium: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+      --shadow-heavy: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
     }
-    .dark-mode header { background: #1e1e1e; }
-    .dark-mode .search-bar button { background: #333; }
-    .dark-mode ul.chapters li { background: #1e1e1e; color: #ddd; }
-    .dark-mode ul.chapters li:hover { background: #2c2c2c; }
+
+    .dark-mode header {
+      background: rgba(26, 32, 44, 0.95);
+    }
+
+    .dark-mode body::before {
+      opacity: 0.05;
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .container {
+        padding: 30px 20px;
+      }
+
+      .header-content {
+        padding: 0 20px;
+      }
+
+      .welcome-section h2 {
+        font-size: 28px;
+      }
+
+      .chapters-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .chapter-card {
+        padding: 24px;
+      }
+    }
+
+    /* Smooth animations */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
   </style>
 </head>
 <body>
+  <!-- Glow cursor effect -->
+  <div class="glow-cursor" id="glowCursor"></div>
+
   <header>
-    <h1>C & C++ Programming Notes</h1>
-    <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+    <div class="header-content">
+      <div class="logo">
+        <div class="logo-icon">C++</div>
+        <h1>Programming Notes</h1>
+      </div>
+      <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+    </div>
   </header>
 
   <div class="container">
-    <div class="search-bar">
-      <input type="text" id="searchInput" placeholder="Search in page...">
-      <button onclick="searchText()">Search</button>
+    <div class="welcome-section">
+      <h2>Welcome to C & C++</h2>
+      <p>Comprehensive programming notes designed for computer science students. Master the fundamentals with structured, easy-to-follow content.</p>
     </div>
 
-    <h2>Welcome</h2>
-    <p>This site contains structured notes on <b>C and C++ programming</b>. Below are the chapters covered in this series:</p>
+    <div class="search-section">
+      <div class="search-container">
+        <div class="search-bar">
+          <input type="text" id="searchInput" placeholder="Search through notes...">
+          <button class="search-btn" onclick="searchText()">Search</button>
+        </div>
+      </div>
+    </div>
 
-    <ul class="chapters">
-      <li onclick="goToPage('Introduction_to_Programming_languages.html')">
-        [0] Introduction to Programming Languages
+    <ul class="chapters-grid">
+      <li class="chapter-card" onclick="goToPage('Introduction_to_Programming_languages.html')">
+        <div class="chapter-number">0</div>
+        <div class="chapter-title">Introduction to Programming Languages</div>
+        <div class="chapter-description">Fundamental concepts and overview of programming paradigms</div>
       </li>
-      <li onclick="goToPage('Inside_C.html')">
-        [1] Inside C
+      <li class="chapter-card" onclick="goToPage('Inside_C.html')">
+        <div class="chapter-number">1</div>
+        <div class="chapter-title">Inside C</div>
+        <div class="chapter-description">Deep dive into C programming language internals</div>
       </li>
     </ul>
   </div>
 
   <script>
-    // 🔎 Search & highlight function
+    // Glow cursor effect
+    const glowCursor = document.getElementById('glowCursor');
+    let mouseX = 0, mouseY = 0;
+    let cursorX = 0, cursorY = 0;
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+
+    function animateCursor() {
+      const dx = mouseX - cursorX;
+      const dy = mouseY - cursorY;
+      
+      cursorX += dx * 0.1;
+      cursorY += dy * 0.1;
+      
+      glowCursor.style.left = cursorX + 'px';
+      glowCursor.style.top = cursorY + 'px';
+      
+      requestAnimationFrame(animateCursor);
+    }
+    animateCursor();
+
+    // Hide glow cursor on touch devices
+    if ('ontouchstart' in window) {
+      glowCursor.style.display = 'none';
+    }
+
+    // Search functionality
     function searchText() {
-      const input = document.getElementById("searchInput").value.toLowerCase();
+      const input = document.getElementById("searchInput").value.toLowerCase().trim();
       if (!input) return;
+      
       removeHighlights();
-      highlight(document.body, input);
+      if (input) {
+        highlight(document.body, input);
+      }
     }
 
     function highlight(element, text) {
@@ -137,11 +491,21 @@
       });
     }
 
-    // 🌙 Dark/Light Mode
+    // Enhanced search with Enter key support
+    document.getElementById('searchInput').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        searchText();
+      }
+    });
+
+    // Theme toggle functionality
     function toggleTheme() {
-      document.body.classList.toggle("dark-mode");
+      const body = document.body;
       const btn = document.querySelector(".theme-toggle");
-      if (document.body.classList.contains("dark-mode")) {
+      
+      body.classList.toggle("dark-mode");
+      
+      if (body.classList.contains("dark-mode")) {
         btn.textContent = "☀️";
         localStorage.setItem("theme", "dark");
       } else {
@@ -150,18 +514,34 @@
       }
     }
 
-    // Save theme preference
-    window.onload = function() {
-      if(localStorage.getItem("theme") === "dark") {
+    // Load saved theme
+    window.addEventListener('load', function() {
+      const savedTheme = localStorage.getItem("theme");
+      const btn = document.querySelector(".theme-toggle");
+      
+      if (savedTheme === "dark") {
         document.body.classList.add("dark-mode");
-        document.querySelector(".theme-toggle").textContent = "☀️";
+        btn.textContent = "☀️";
       }
+    });
+
+    // Navigation
+    function goToPage(page) {
+      // Add a subtle loading animation
+      document.body.style.opacity = '0.8';
+      setTimeout(() => {
+        window.location.href = page;
+      }, 150);
     }
 
-    // 📑 Go to chapters
-    function goToPage(page) {
-      window.location.href = page;
-    }
+    // Add subtle page load animation
+    window.addEventListener('load', function() {
+      document.body.style.opacity = '0';
+      setTimeout(() => {
+        document.body.style.transition = 'opacity 0.5s ease';
+        document.body.style.opacity = '1';
+      }, 100);
+    });
   </script>
 </body>
 </html>
